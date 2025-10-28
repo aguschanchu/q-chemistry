@@ -1,0 +1,12 @@
+#### requirements.txt
+numpy>=1.20.0
+scipy>=1.7.0
+matplotlib>=3.4.0
+tqdm>=4.60.0
+sparse>=0.13.0
+numba>=0.53.0
+openfermion>=1.5.0
+pyscf>=2.0.0
+openfermionpyscf>=0.5.0
+
+# Note: fermionic_mbody must be installed separately via git (See README.md)
