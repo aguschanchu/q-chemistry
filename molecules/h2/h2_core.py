@@ -47,7 +47,7 @@ DEFAULT_BETA_HARTREE_INVERSE = 1000.0
 SCAN_GRID_ANGSTROM = tuple(np.round(np.linspace(0.4, 6.0, 57), 10))
 
 def compute_grid() -> tuple[float, ...]:
-    """Sorted union of the plotting grid and every exact anchor geometry"""
+    """Return the primary 57-point dissociation grid."""
     values = {round(float(r), 10) for r in SCAN_GRID_ANGSTROM}
     return tuple(sorted(values))
 
@@ -197,16 +197,12 @@ def _purify_spin_clusters(
     cluster_tolerance: float,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    Simultaneously diagonalize H and S^2 inside degenerate clusters.
+    Construct simultaneous H and S^2 eigenstates inside near-degenerate clusters.
 
-    eigh returns arbitrary rotations inside degenerate energy
-    clusters, which mix singlet and triplet components; since [H, S^2] = 0
-    the in-cluster S^2 matrix can be diagonalized exactly.  Diagonalizing
-    S^2 alone is not sufficient: a cluster may contain two states of the
-    same spin whose real sub-tolerance splitting an arbitrary S^2-noise
-    rotation would erase.  Each equal-spin subspace is therefore
-    re-diagonalized in the projected Hamiltonian, and the full root list is
-    re-sorted by the revalidated energies before it is returned.
+    Within an exactly or numerically degenerate energy subspace, a Hermitian
+    eigensolver may return an arbitrary orthonormal basis. Such vectors need
+    not have definite total spin even though [H, S^2] = 0. The projected S^2
+    matrix is therefore diagonalized inside each cluster.
     """
     values = eigenvalues.copy()
     vectors = eigenvectors.copy()
@@ -482,9 +478,11 @@ def partial_transpose_product(matrix: np.ndarray, dim_a: int, dim_b: int) -> np.
 
 def opposite_spin_negativity(product_rdm: np.ndarray, norb: int, n_pairs: float) -> float:
     """
-    Two-body up-down negativity of the product-basis block
+    Opposite-spin two-body negativity in the ordered product basis.
 
-    Evaluated as ``-sum lambda_i^(-)`` of the partial transpose
+        N^(2)_{up,down}
+        = 0.5 * (||rho^(2) T_down||_1 - N_up N_down)
+        = -sum(lambda_i < 0) lambda_i
     """
     pt = partial_transpose_product(product_rdm, norb, norb)
     eigenvalues = np.linalg.eigvalsh(0.5 * (pt + pt.conj().T))
@@ -708,8 +706,9 @@ def analyze_thermal_state(
             "singlet_weight": float(weights[spins == 0].sum()),
             "triplet_weight": float(weights[spins == 1].sum()),
             "s_mixture": s_mixture,
-            # For (1,1) the reduced two-body MI *is* the global spin MI; both
-            # sides are computed and gated above.
+            # For (1,1), rho2_ab is the complete fixed-sector density, so the
+            # reduced two-body MI is algebraically identical to the global
+            # spin MI
             "i_ab": float(
                 observables["s_rho1_alpha"] + observables["s_rho1_beta"] - s_gamma
             ),
