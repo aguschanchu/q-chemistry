@@ -1,21 +1,38 @@
-# M-body Entanglement and Entropy Analysis of H2O Dissociation
+# q-chemistry
 
-## Overview
+Companion code for
 
-This project provides a computational example of applying M-body entanglement and entropy measures to the dissociation of the water molecule (H2O). It utilizes Full Configuration Interaction (FCI) calculations within the STO-3G basis to track how electronic correlation and entanglement evolve as the O-H bonds are symmetrically stretched to the dissociation limit.
+> J. Garcia, J. A. Cianciulli, and R. Rossignoli,
+> *Fermionic entanglement and quantum correlation measures in molecules*,
+> [arXiv:2604.07633](https://arxiv.org/abs/2604.07633) (2026).
 
-The analysis relies on the `openfermion` ecosystem for quantum chemistry calculations and the [`fermionic-mbody`](https://github.com/aguschanchu/fermionic-mbody) library for efficient Reduced Density Matrix (RDM) computations.
+The repository computes spin-resolved entanglement and quantum-correlation
+measures, von Neumann entropies of particle reduced density matrices (RDMs),
+global and two-body mutual informations, and fermionic negativities, along
+molecular dissociation curves, for exact finite-basis (full-CI) ground states
+and for low-temperature Gibbs states projected onto a fixed-$M_S$ sector.
 
-## Key Features and Methodology
+Particle RDMs are normalized such that their traces equal to particle-pair 
+counts and all entropies are reported in bits (base-2 logarithms). Each 
+molecule ships as a self-contained three-file release: a narrative notebook, 
+a molecule-specific physics core, and a compact RDM engine. 
 
-1.  **FCI Dissociation Curve:** Calculation of the ground state potential energy curve restricted to the $S_z=0$ subspace.
-2.  **M-body RDM Generation:** Efficient generation of 1-RDM and 2-RDM tensors, including specific spin blocks (UPUP, UPDOWN) in both antisymmetrized and ordered bases.
-3.  **M-body Entropy:** Calculation of the von Neumann entropy of normalized M-RDMs to quantify correlation.
-4.  **Fermionic Negativity:** Quantification of entanglement using the Sum of Negative Eigenvalues (SNE) of the partially transposed 2-RDM blocks, handling fermionic statistics.
-5.  **Mutual Information:** Analysis of the mutual information between spin-UP and spin-DOWN subsystems.
-6.  **Dissociation Limit Analysis:** Detailed investigation of the degenerate ground state manifold at the dissociation limit, identifying the subspace spanned by Slater Determinants versus correlated states by minimizing the 1-RDM purity defect ($N - Tr(\rho_1^2)$).
-7.  **Basis Sparsity Optimization (Demonstration):** Example of optimizing the single-particle basis to maximize the sparsity of the wavefunction coefficient matrix.
+## Repository map
 
-## Usage
+| Path | Contents |
+|---|---|
+| [`molecules/h2o/release/`](molecules/h2o/) | H₂O/STO-3G — the manuscript's system. Reproduces Figures 2–8 of the paper from a single scan of the complete 441-dimensional $M_S=0$ sector. |
+| [`molecules/h2/release/`](molecules/h2/) | H₂/cc-pVDZ — the same measures applied to the analytically transparent two-electron case. |
 
-The analysis is provided as Jupyter Notebook
+## Setup
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+## Run the releases
+
+Each notebook is a single clean `Run All`: one deterministic scan, then the
+figures. Both notebooks can equally be opened and run interactively
+(`jupyter notebook main.ipynb`).
+
