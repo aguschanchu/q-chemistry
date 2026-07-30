@@ -21,8 +21,8 @@ a molecule-specific physics core, and a compact RDM engine.
 
 | Path | Contents |
 |---|---|
-| [`molecules/h2o/release/`](molecules/h2o/) | H₂O/STO-3G — the manuscript's system. Reproduces Figures 2–8 of the paper from a single scan of the complete 441-dimensional $M_S=0$ sector. |
-| [`molecules/h2/release/`](molecules/h2/) | H₂/cc-pVDZ — the same measures applied to the analytically transparent two-electron case. |
+| [`molecules/h2o/`](molecules/h2o/) | H₂O/STO-3G — the manuscript's system. Reproduces Figures 2–8 of the paper from a single scan of the complete 441-dimensional $M_S=0$ sector. |
+| [`molecules/h2/`](molecules/h2/) | H₂/cc-pVDZ — the same measures applied to the analytically transparent two-electron case. |
 
 ## Setup
 
