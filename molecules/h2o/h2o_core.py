@@ -253,8 +253,14 @@ def run_electronic_structure(r_angstrom: float, *,
         shifted.kernel()
         mean_field = scf.newton(scf.RHF(mol))
         mean_field.conv_tol = config.scf_conv_tol
-        mean_field.kernel(dm0=shifted.make_rdm1())
+        try:
+            mean_field.kernel(dm0=shifted.make_rdm1())
+        except np.linalg.LinAlgError:
+            pass
         mo_source = "pyscf_newton_shifted"
+        if not mean_field.converged and shifted.converged:
+            mean_field = shifted
+            mo_source = "pyscf_rhf_shifted"
     if not mean_field.converged:
         raise RuntimeError(
             f"SCF failed at R={r_angstrom} Angstrom "
