@@ -4,4 +4,4 @@ matplotlib>=3.4.0
 tqdm>=4.66.0
 openfermion>=1.5.0
 pyscf>=2.0.0
-fermionic-mbody @ git+https://github.com/aguschanchu/fermionic-mbody.git
+fermionic-mbody @ git+https://github.com/aguschanchu/fermionic-mbody.git@b31b76082a0b573b0ad11904868286b8f083d424
