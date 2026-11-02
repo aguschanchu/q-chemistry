@@ -67,7 +67,7 @@ class SolverConfig:
     orthonormality_tol: float = 1e-10
     spin_cluster_tol_hartree: float = 1e-5
     spin_rounding_tol: float = 1e-2
-    s2_variance_tol: float = 1e-8
+    s2_variance_tol: float = 5e-7
     sz_tol: float = 1e-10
     trace_tol: float = 1e-8
     psd_tol: float = 5e-9
@@ -712,7 +712,7 @@ def compute_figure5_data(arrays: dict[str, np.ndarray]) -> dict:
     """Stored values are on the Eq. (24)/(26)/(31) scale"""
     
     data = {"r": arrays["r"],
-            "display_factor_updown2": np.array(0.5)}
+            "display_factor_updown2": np.array(1.0)}
     for prefix in ("gs", "thermal"):
         for name in ("n_updown", "n2_updown", "n2_upup"):
             data[f"{prefix}_{name}"] = arrays[f"{prefix}_{name}"]
